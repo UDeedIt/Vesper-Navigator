@@ -1,0 +1,32 @@
+# Android Studio / IntelliJ
+*.iml
+.gradle
+.idea/
+/local.properties
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+/build
+/captures
+.externalNativeBuild
+.cxx
+/google-services.json
+
+# Specialized
+*.keystore
+*.jks
+*.bin
+
+# Local IDE/System files
+local.properties
+.DS_Store
+
+**/.kotlin/
+*.hprof
+*.log
+.idea/deploymentTargetDropDown.xml
+.idea/migrations.xml
+.idea/inspectionProfiles/
