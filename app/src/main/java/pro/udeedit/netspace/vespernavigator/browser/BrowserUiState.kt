@@ -9,12 +9,12 @@ data class BrowserUiState(
     /**
      * Initial URL to load when the WebView is first created.
      */
-    val startUrl: String = "https://example.com",
+    val startUrl: String = "https://netspace.udeedit.pro/VesperNavigator/index.html",
 
     /**
      * URL currently shown (or being loaded) in the WebView.
      */
-    val currentUrl: String = "https://example.com",
+    val currentUrl: String = "https://netspace.udeedit.pro/VesperNavigator/index.html",
 
     /**
      * Indicates whether a page load is currently in progress.

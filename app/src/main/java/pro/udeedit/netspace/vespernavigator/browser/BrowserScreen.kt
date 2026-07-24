@@ -93,8 +93,8 @@ fun BrowserScreen(
 @Composable
 private fun BrowserScreenPreview() {
     val previewState = BrowserUiState(
-        startUrl = "https://example.com",
-        currentUrl = "https://example.com",
+        startUrl = "https://netspace.udeedit.pro/VesperNavigator/index.html",
+        currentUrl = "https://netspace.udeedit.pro/VesperNavigator/index.html",
         isLoading = true
     )
 

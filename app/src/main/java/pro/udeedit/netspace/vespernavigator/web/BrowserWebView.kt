@@ -2,6 +2,7 @@ package pro.udeedit.netspace.vespernavigator.web
 
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
+import android.util.Log
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -30,12 +31,14 @@ fun BrowserWebView(
                 // Basic settings suitable for a general-purpose browser.
                 settings.javaScriptEnabled = true
                 settings.domStorageEnabled = true
-                settings.cacheMode = WebSettings.LOAD_DEFAULT
+                // Avoid using WebView cache for the test homepage to prevent ERR_CACHE_MISS.
+                settings.cacheMode = WebSettings.LOAD_NO_CACHE
 
                 // Attach a WebViewClient to observe navigation and errors.
                 webViewClient = object : WebViewClient() {
                     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                         super.onPageStarted(view, url, favicon)
+                        Log.d("VesperWebView", "onPageStarted: $url")
                         if (url != null) {
                             viewModel.onPageStarted(url)
                         }
@@ -58,6 +61,7 @@ fun BrowserWebView(
                         error: android.webkit.WebResourceError?
                     ) {
                         super.onReceivedError(view, request, error)
+                        Log.e("VesperWebView", "onReceivedError: ${request?.url} code=${error?.errorCode}")
                         val description = error?.description?.toString() ?: "Unknown error"
                         viewModel.onPageError(description)
                     }
