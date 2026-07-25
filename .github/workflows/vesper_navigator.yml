@@ -1,8 +1,9 @@
 name: Vesper Navigator CI
 
 on:
-  push:
-    branches: [ "master", "develop", "feature/**" ]
+  workflow_dispatch:
+  #  push:
+  #    branches: [ "master", "develop", "feature/**", "hotfix/**" ]
   pull_request:
     branches: [ "master", "develop" ]
 
