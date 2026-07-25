@@ -8,6 +8,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.viewinterop.AndroidView
 import pro.udeedit.netspace.vespernavigator.browser.BrowserViewModel
 
@@ -25,6 +26,11 @@ fun BrowserWebView(
     url: String,
     viewModel: BrowserViewModel
 ) {
+    if (LocalInspectionMode.current) {
+        // WebView is not supported in Previews and will cause a crash due to Layoutlib limitations.
+        return
+    }
+
     AndroidView(
         factory = { context ->
             WebView(context).apply {

@@ -2,17 +2,16 @@ package pro.udeedit.netspace.vespernavigator.browser
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -26,7 +25,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import pro.udeedit.netspace.vespernavigator.ui.theme.VesperNavigatorTheme
 import pro.udeedit.netspace.vespernavigator.web.BrowserWebView
 
@@ -87,6 +87,28 @@ fun BrowserScreen(
         },
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
+        },
+        bottomBar = {
+            androidx.compose.material3.NavigationBar {
+                IconButton(
+                    onClick = { viewModel.onBack() },
+                    enabled = uiState.value.canGoBack
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back"
+                    )
+                }
+                IconButton(
+                    onClick = { viewModel.onForward() },
+                    enabled = uiState.value.canGoForward
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                        contentDescription = "Forward"
+                    )
+                }
+            }
         }
     ) { innerPadding ->
 
@@ -109,10 +131,26 @@ fun BrowserScreen(
     }
 }
 
+
+// PREVIEWS
+
+/**
+ * Lightweight ViewModel used only for Compose previews.
+ */
+private class PreviewBrowserViewModel(
+    initialState: BrowserUiState
+) : BrowserViewModel() {
+
+    private val previewState = MutableStateFlow(initialState)
+
+    override val uiState: StateFlow<BrowserUiState>
+        get() = previewState
+}
+
 /**
  * Preview of the browser chrome in a typical "page loading" state.
  *
- * Note: This preview renders only a static layout (no real WebView).
+ * Note: This preview uses a fake ViewModel and does not run a real WebView.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
@@ -121,26 +159,14 @@ private fun BrowserScreenPreview() {
     val previewState = BrowserUiState(
         startUrl = "https://netspace.udeedit.pro/VesperNavigator/index.html",
         currentUrl = "https://netspace.udeedit.pro/VesperNavigator/index.html",
-        isLoading = true
+        isLoading = true,
+        canGoBack = true,
+        canGoForward = false
     )
 
+    val previewViewModel = PreviewBrowserViewModel(previewState)
+
     VesperNavigatorTheme {
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = { Text(text = previewState.currentUrl) }
-                )
-            }
-        ) { innerPadding ->
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
-            ) {
-                CircularProgressIndicator(
-                    modifier = Modifier.align(Alignment.Center)
-                )
-            }
-        }
+        BrowserScreen(viewModel = previewViewModel)
     }
 }

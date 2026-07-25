@@ -26,7 +26,7 @@ interface BrowserStateOwner {
  * DI-friendly, testable way.
  */
 @HiltViewModel
-class BrowserViewModel @Inject constructor() : ViewModel() {
+open class BrowserViewModel @Inject constructor() : ViewModel() {
 
     // Backing state that can be updated inside the ViewModel only.
     private val _uiState = MutableStateFlow(BrowserUiState())
@@ -34,7 +34,7 @@ class BrowserViewModel @Inject constructor() : ViewModel() {
     /**
      * Public, read-only browser UI state for the UI layer.
      */
-    val uiState: StateFlow<BrowserUiState> = _uiState.asStateFlow()
+    open val uiState: StateFlow<BrowserUiState> = _uiState.asStateFlow()
 
     /**
      * Should be called when a new page load starts in the WebView.
