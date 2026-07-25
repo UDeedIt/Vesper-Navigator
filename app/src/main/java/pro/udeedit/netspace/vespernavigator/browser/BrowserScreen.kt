@@ -1,10 +1,19 @@
 package pro.udeedit.netspace.vespernavigator.browser
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -17,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import pro.udeedit.netspace.vespernavigator.ui.theme.VesperNavigatorTheme
 import pro.udeedit.netspace.vespernavigator.web.BrowserWebView
 
@@ -53,8 +63,26 @@ fun BrowserScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                // For now, simply show the current URL as the title.
-                title = { Text(text = uiState.value.currentUrl) }
+                title = {
+                    Column {
+                        Text(text = "Vesper Navigator")
+                        Text(
+                            text = uiState.value.currentUrl,
+                            style = MaterialTheme.typography.labelSmall
+                        )
+                    }
+                },
+                actions = {
+                    IconButton(
+                        onClick = { viewModel.onReload() },
+                        enabled = !uiState.value.isLoading
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Refresh,
+                            contentDescription = "Reload"
+                        )
+                    }
+                }
             )
         },
         snackbarHost = {
@@ -67,13 +95,11 @@ fun BrowserScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            // Main web content area.
             BrowserWebView(
                 url = uiState.value.startUrl,
                 viewModel = viewModel
             )
 
-            // Centered loading indicator while a page is being loaded.
             if (uiState.value.isLoading) {
                 CircularProgressIndicator(
                     modifier = Modifier.align(Alignment.Center)
